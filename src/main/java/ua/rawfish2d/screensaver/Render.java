@@ -74,6 +74,8 @@ public class Render {
 		});
 
 		fontContext = Context.setupFontContext(1024, window.getDisplayWidth(), window.getDisplayHeight());
+		window.showWindow();
+
 		loadAnimations();
 		textureContext3D = Context.setupTexture3DContext(objectCount3D * arraysCount, window.getDisplayWidth(), window.getDisplayHeight());
 		camera = new Camera(input, window);
@@ -83,7 +85,6 @@ public class Render {
 		if (config.isFullScreen()) {
 			window.setPos(0, 0);
 		}
-		window.showWindow();
 		createQuads();
 		keyPressTimer.reset();
 
@@ -131,10 +132,14 @@ public class Render {
 		final AnimationLoader animationLoader = new AnimationLoader();
 		final String assetsFolder = "assets";
 		final Set<String> fileNames = Utils.listFilesUsingJavaIO(assetsFolder);
+		final LoadingProgress loadingProgress = new LoadingProgress(window);
 
 		int index = 0;
 		for (String fileName : fileNames) {
 			System.out.println("Loading file: " + fileName);
+
+			loadingProgress.renderString("Loading file: " + fileName);
+
 			final boolean hasTransparency = fileName.startsWith("T");
 			AnimatedTexture animatedTexture;
 			if (fileName.endsWith(".gif")) {
@@ -156,11 +161,15 @@ public class Render {
 						throw new RuntimeException("Cannot create " + folder + " folder");
 					}
 				}
-				animatedTexture.saveDebugFramebuffer(folder.getName() + "/stitched_debug_texture" + index + ".png");
+				String debugTextureFileName = folder.getName() + "/stitched_debug_texture" + index + ".png";
+				loadingProgress.renderString("Saving debug texture: " + debugTextureFileName);
+				animatedTexture.saveDebugFramebuffer(debugTextureFileName);
 			}
 			animatedTexture.cleanUp();
 			index++;
 		}
+
+		loadingProgress.delete();
 	}
 
 	private void doStuff() {
@@ -372,7 +381,6 @@ public class Render {
 	}
 
 	private void shutdown() {
-		window.closeWindow();
 		meshes.forEach(mesh -> {
 			mesh.getAnimatedTexture().delete();
 			mesh.getRangeBuffer().free();
@@ -387,7 +395,6 @@ public class Render {
 
 		quads3D.clear();
 
-		window.cleanUp();
 		window.terminate();
 
 		System.exit(0);
