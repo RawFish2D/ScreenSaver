@@ -129,7 +129,8 @@ public class Render {
 	private void loadAnimations() {
 		final GifLoader gifLoader = new GifLoader();
 		final AnimationLoader animationLoader = new AnimationLoader();
-		final Set<String> fileNames = Utils.listFilesUsingJavaIO("anims");
+		final String assetsFolder = "assets";
+		final Set<String> fileNames = Utils.listFilesUsingJavaIO(assetsFolder);
 
 		int index = 0;
 		for (String fileName : fileNames) {
@@ -137,11 +138,11 @@ public class Render {
 			final boolean hasTransparency = fileName.startsWith("T");
 			AnimatedTexture animatedTexture;
 			if (fileName.endsWith(".gif")) {
-				animatedTexture = gifLoader.loadGif("assets/" + fileName);
+				animatedTexture = gifLoader.loadGif(assetsFolder + "/" + fileName);
 				// without this it bugs out for some reason
 				GLSM.instance.glBindTexture(0);
 			} else if (fileName.endsWith(".webp")) {
-				animatedTexture = animationLoader.loadAnimation("assets/" + fileName, fontContext, hasTransparency);
+				animatedTexture = animationLoader.loadAnimation(assetsFolder + "/" + fileName, fontContext, hasTransparency);
 				// without this it bugs out for some reason
 				GLSM.instance.glBindTexture(0);
 			} else {
