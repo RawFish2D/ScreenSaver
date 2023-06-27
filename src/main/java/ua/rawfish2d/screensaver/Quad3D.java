@@ -31,24 +31,18 @@ public class Quad3D {
 		final float renderDepth = render.getRenderDepth();
 		final float depth = render.getDepth();
 		final long delta = render.getDelta();
-//		alpha = MathUtils.clamp(1f - (Math.abs(z) - depth) + 4f, 0f, 1f);
-		float limit = depth + renderDepth - Math.abs(z) - 1f;
+		final float limit = depth + renderDepth - Math.abs(z) - 1f;
 		alpha = MathUtils.clamp(limit, 0f, 1f);
-		int color = 0xFFFFFF | ((int) (alpha * 255) << 24);
+		final int color = 0xFFFFFF | ((int) (alpha * 255) << 24);
 
-		if (limit < 1f) {
-			//color = 0xFF00FF00;
-		}
-
-//		if (Math.abs(z) - depth > 5f) {
-		if (Math.abs(z) > depth + renderDepth - 1f) {
-			//color = 0xFF00FF00;
-			//return false;
-		}
-		if (Math.abs(z) - depth < -6f) {
-			//color = 0xFF0000FF;
-			//return false;
-		}
+//		if (Math.abs(z) > depth + renderDepth - 1f) {
+//			//color = 0xFF00FF00;
+//			return false;
+//		}
+//		if (Math.abs(z) - depth < -6f) {
+//			//color = 0xFF0000FF;
+//			return false;
+//		}
 
 		if (spriteIndex >= mesh.getAnimatedTexture().getSpriteCount()) {
 			spriteIndex = 0;
@@ -88,7 +82,7 @@ public class Quad3D {
 	}
 
 	public void setRandomSpriteIndex() {
-		AnimatedTexture animatedTexture = mesh.getAnimatedTexture();
+		final AnimatedTexture animatedTexture = mesh.getAnimatedTexture();
 		this.spriteIndex = MiscUtils.random(0, animatedTexture.getSpriteCount() - 1);
 	}
 }

@@ -20,7 +20,7 @@ public class Context {
 		final InputStream fragStream = Utils.getInputStream("shaders/basic/texture2d.frag");
 		shaderProgram.loadShaders(vertStream, fragStream);
 
-		VertexBuffer vbo = new VertexBuffer(0);
+		final VertexBuffer vbo = new VertexBuffer();
 		vbo.setShader(shaderProgram);
 		vbo.setDrawType(GL_QUADS);
 		vbo.setMaxObjectCount(objectCount);
@@ -35,14 +35,14 @@ public class Context {
 		vbo.clearBuffers();
 
 		final IntBuffer indexBuffer = vbo.getIndexBuffer();
+		// this loop is kinda confusing I know, but I promise it works as intended
 		for (int a = 0; a < objectCount * vbo.verticesPerObject; a += vbo.verticesPerObject) {
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 			indexBuffer.put(a + 1);
 			indexBuffer.put(a + 2);
-
 			indexBuffer.put(a + 2);
 			indexBuffer.put(a + 3);
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 		}
 		indexBuffer.flip();
 		vbo.uploadBuffers();
@@ -67,7 +67,7 @@ public class Context {
 		final InputStream fragStream = Utils.getInputStream("shaders/basic/texture3d.frag");
 		shaderProgram.loadShaders(vertStream, fragStream);
 
-		VertexBuffer vbo = new VertexBuffer(0);
+		VertexBuffer vbo = new VertexBuffer();
 		vbo.setShader(shaderProgram);
 		vbo.setDrawType(GL_QUADS);
 		vbo.setMaxObjectCount(objectCount);
@@ -84,14 +84,14 @@ public class Context {
 		vbo.clearBuffers();
 
 		final IntBuffer indexBuffer = vbo.getIndexBuffer();
+		// this loop is kinda confusing I know, but I promise it works as intended
 		for (int a = 0; a < objectCount * vbo.verticesPerObject; a += vbo.verticesPerObject) {
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 			indexBuffer.put(a + 1);
 			indexBuffer.put(a + 2);
-
 			indexBuffer.put(a + 2);
 			indexBuffer.put(a + 3);
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 		}
 		indexBuffer.flip();
 		vbo.uploadBuffers();
@@ -116,7 +116,7 @@ public class Context {
 		final InputStream fragStream = Utils.getInputStream("shaders/font/font.frag");
 		shader.loadShaders(vertStream, fragStream);
 
-		VertexBuffer vbo = new VertexBuffer(0);
+		VertexBuffer vbo = new VertexBuffer();
 		vbo.setShader(shader);
 		vbo.setDrawType(GL_QUADS);
 		vbo.setMaxObjectCount(objectCount);
@@ -131,14 +131,14 @@ public class Context {
 		vbo.clearBuffers();
 
 		final IntBuffer indexBuffer = vbo.getIndexBuffer();
+		// this loop is kinda confusing I know, but I promise it works as intended
 		for (int a = 0; a < objectCount * vbo.verticesPerObject; a += vbo.verticesPerObject) {
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 			indexBuffer.put(a + 1);
 			indexBuffer.put(a + 2);
-
 			indexBuffer.put(a + 2);
 			indexBuffer.put(a + 3);
-			indexBuffer.put(a + 0);
+			indexBuffer.put(a);
 		}
 		indexBuffer.flip();
 		vbo.uploadBuffers();
@@ -148,7 +148,7 @@ public class Context {
 		final Font font = new Font("Dialog.plain", Font.PLAIN, fontSize);
 		final String fontCachePng = "font" + fontSize + ".png";
 		final String fontCacheTxt = "font" + fontSize + ".txt";
-		FontRenderer fontRenderer = null;
+		FontRenderer fontRenderer;
 		if (!new File(fontCachePng).exists() || !new File(fontCacheTxt).exists()) {
 			System.out.println("Font cache not found.");
 			fontRenderer = new FontRenderer(font, 256, 256, true, true, 2, 2, 256);
@@ -160,9 +160,6 @@ public class Context {
 		}
 
 		vbo.clearBuffers();
-
-		//vboFont = vbo;
-		//fontShader = shader;
 
 		final RenderBuffer renderBuffer = new RenderBuffer();
 		renderBuffer.setBuffers(vbo, 0, 1, 2);
